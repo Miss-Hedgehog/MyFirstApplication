@@ -71,6 +71,7 @@ public class ShopItemFragment extends Fragment {
 
 
 
+
     public ShopItemFragment() {
         // Required empty public constructor
     }
