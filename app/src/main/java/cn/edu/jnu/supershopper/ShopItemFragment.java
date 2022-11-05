@@ -45,7 +45,7 @@ public class ShopItemFragment extends Fragment {
                         String title= bundle.getString("title");
                         double price=bundle.getDouble("price");
                         int position=bundle.getInt("position");
-                        shopItems.add(position, new ShopItem(title,price,R.drawable.folder) );
+                        shopItems.add(position, new ShopItem(title,price,R.drawable.book_no_name) );
                         new DataSaver().Save(this.getContext(),shopItems);
                         mainRecycleViewAdapter.notifyItemInserted(position);
                     }
@@ -111,7 +111,7 @@ public class ShopItemFragment extends Fragment {
         shopItems=dataSaver.Load(this.getContext());
 
         if(shopItems.size()==0) {
-            shopItems.add(new ShopItem("item 0", Math.random() * 10, R.drawable.folder));
+            shopItems.add(new ShopItem("item 0", Math.random() * 10, R.drawable.book_1));
         }
         mainRecycleViewAdapter= new MainRecycleViewAdapter(shopItems);
         recyclerViewMain.setAdapter(mainRecycleViewAdapter);
