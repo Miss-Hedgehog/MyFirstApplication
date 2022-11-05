@@ -25,11 +25,7 @@ import java.util.ArrayList;
 import cn.edu.jnu.supershopper.data.DataSaver;
 import cn.edu.jnu.supershopper.data.ShopItem;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ShopItemFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class ShopItemFragment extends Fragment {
 
     public static final int MENU_ID_ADD = 1;
@@ -206,12 +202,7 @@ public class ShopItemFragment extends Fragment {
             }
         }
 
-        /**
-         * Initialize the dataset of the Adapter.
-         *
-         * @param dataSet String[] containing the data to populate views to be used
-         * by RecyclerView.
-         */
+
         public MainRecycleViewAdapter(ArrayList<ShopItem> dataSet) {
             localDataSet = dataSet;
         }
