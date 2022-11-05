@@ -45,7 +45,7 @@ public class ShopItemFragment extends Fragment {
                         String title= bundle.getString("title");
                         double price=bundle.getDouble("price");
                         int position=bundle.getInt("position");
-                        shopItems.add(position, new ShopItem(title,price,R.drawable.ic_launcher_background) );
+                        shopItems.add(position, new ShopItem(title,price,R.drawable.folder) );
                         new DataSaver().Save(this.getContext(),shopItems);
                         mainRecycleViewAdapter.notifyItemInserted(position);
                     }
