@@ -15,7 +15,7 @@ public class DataSaver {
     {
         try {
 
-            FileOutputStream dataStream=context.openFileOutput("bookdata.dat",Context.MODE_PRIVATE);
+            FileOutputStream dataStream=context.openFileOutput("mydata.dat",Context.MODE_PRIVATE);
             ObjectOutputStream out = new ObjectOutputStream(dataStream);
             out.writeObject(data);
             out.close();
@@ -29,7 +29,7 @@ public class DataSaver {
     {
         ArrayList<ShopItem> data=new ArrayList<>();
         try {
-            FileInputStream fileIn = context.openFileInput("bookdata.dat");
+            FileInputStream fileIn = context.openFileInput("mydata.dat");
             ObjectInputStream in = new ObjectInputStream(fileIn);
             data = (ArrayList<ShopItem>) in.readObject();
             in.close();
