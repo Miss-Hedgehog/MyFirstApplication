@@ -4,6 +4,9 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +26,12 @@ import com.baidu.mapapi.model.LatLng;
 
 import java.util.List;
 
+import java.util.logging.LogRecord;
+
+
 import cn.edu.jnu.supershopper.data.HttpDataLoader;
 import cn.edu.jnu.supershopper.data.ShopLocation;
+
 
 public class MapViewFragment extends Fragment {
 
@@ -54,6 +61,10 @@ public class MapViewFragment extends Fragment {
         }
     }
 
+
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -71,7 +82,6 @@ public class MapViewFragment extends Fragment {
                 .build();
         mapView.getMap().setMapStatus(MapStatusUpdateFactory.newMapStatus(mMapStatus));
 
-
         //新建一个线程，读取数据等比较耗时的操作不能放在主线程
         new Thread(new Runnable() {
             @Override
@@ -79,13 +89,24 @@ public class MapViewFragment extends Fragment {
                 HttpDataLoader dataLoader=new HttpDataLoader();
                 String shopJsonData= dataLoader.getHttpData("http://file.nidama.net/class/mobile_develop/data/bookstore2022.json");
                 List<ShopLocation> locations=dataLoader.ParseJsonData(shopJsonData);
+                //使用Handler
 
-                MapViewFragment.this.getActivity().runOnUiThread(new Runnable() {
+                Handler mainHandler = new Handler(Looper.getMainLooper());
+                mainHandler.post(new Runnable() {
                     @Override
                     public void run() {
+                        //已在主线程中，可以更新UI
                         AddMarkersOnMap(locations);
                     }
                 });
+               /*
+                MapViewFragment.this.getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        AddMarkersOnMap(locations);
+                    }
+                });*/
             }
         }).start();
 
@@ -102,7 +123,6 @@ public class MapViewFragment extends Fragment {
         BitmapDescriptor bitmap= BitmapDescriptorFactory.fromResource(R.drawable.home);
         for (ShopLocation shop: locations) {
             LatLng shopPoint = new LatLng(shop.getLatitude(),shop.getLongitude());
-
             OverlayOptions options = new MarkerOptions().position(shopPoint).icon(bitmap);
             //将maker添加到地图
             mapView.getMap().addOverlay(options);
@@ -130,3 +150,4 @@ public class MapViewFragment extends Fragment {
         mapView.onDestroy();
     }
 }
+

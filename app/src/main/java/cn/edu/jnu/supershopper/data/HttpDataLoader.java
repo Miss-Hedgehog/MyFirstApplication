@@ -51,8 +51,6 @@ public class HttpDataLoader {
                     resultBuffer.append(tempLine);
                     resultBuffer.append("\n");
                 }
-                Log.i("test data",resultBuffer.toString());
-
                 return resultBuffer.toString();
             }
         }catch(Exception exception)
