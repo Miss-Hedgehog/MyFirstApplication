@@ -21,6 +21,11 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.TextOptions;
 import com.baidu.mapapi.model.LatLng;
 
+import java.util.List;
+
+import cn.edu.jnu.supershopper.data.HttpDataLoader;
+import cn.edu.jnu.supershopper.data.ShopLocation;
+
 public class MapViewFragment extends Fragment {
 
     private MapView mapView;
@@ -58,7 +63,6 @@ public class MapViewFragment extends Fragment {
         MapStatus.Builder builder = new MapStatus.Builder();
         builder.zoom(18.0f);
         mapView.getMap().setMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
-
         LatLng cenpt = new LatLng(22.255925,113.541112);
         //定义地图状态
         MapStatus mMapStatus = new MapStatus.Builder()
@@ -67,15 +71,23 @@ public class MapViewFragment extends Fragment {
                 .build();
         mapView.getMap().setMapStatus(MapStatusUpdateFactory.newMapStatus(mMapStatus));
 
-        BitmapDescriptor bitmap= BitmapDescriptorFactory.fromResource(R.drawable.home);
-        OverlayOptions options = new MarkerOptions().position(cenpt).icon(bitmap);
-        //将maker添加到地图
-        mapView.getMap().addOverlay(options);
-        mapView.getMap().addOverlay(new TextOptions().bgColor(0xAAFFFF00)
 
-                .fontSize(24)
+        //新建一个线程，读取数据等比较耗时的操作不能放在主线程
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HttpDataLoader dataLoader=new HttpDataLoader();
+                String shopJsonData= dataLoader.getHttpData("http://file.nidama.net/class/mobile_develop/data/bookstore2022.json");
+                List<ShopLocation> locations=dataLoader.ParseJsonData(shopJsonData);
 
-                .fontColor(0xFFFF00FF).text("暨南大学").position(cenpt));
+                MapViewFragment.this.getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AddMarkersOnMap(locations);
+                    }
+                });
+            }
+        }).start();
 
         mapView.getMap().setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
             @Override
@@ -84,31 +96,20 @@ public class MapViewFragment extends Fragment {
                 return false;
             }
         });
-        mapView.getMap().setOnMarkerDragListener(new BaiduMap.OnMarkerDragListener() {
-
-            //在Marker拖拽过程中回调此方法，这个Marker的位置可以通过getPosition()方法获取
-            //marker 被拖动的Marker对象
-            @Override
-            public void onMarkerDrag(Marker marker) {
-                //对marker处理拖拽逻辑
-            }
-
-            //在Marker拖动完成后回调此方法， 这个Marker的位可以通过getPosition()方法获取
-            //marker 被拖拽的Marker对象
-            @Override
-            public void onMarkerDragEnd(Marker marker) {
-
-            }
-
-            //在Marker开始被拖拽时回调此方法， 这个Marker的位可以通过getPosition()方法获取
-            //marker 被拖拽的Marker对象
-            @Override
-            public void onMarkerDragStart(Marker marker) {
-
-            }
-        });
-
         return rootView;
+    }
+    private void AddMarkersOnMap(List<ShopLocation> locations) {
+        BitmapDescriptor bitmap= BitmapDescriptorFactory.fromResource(R.drawable.home);
+        for (ShopLocation shop: locations) {
+            LatLng shopPoint = new LatLng(shop.getLatitude(),shop.getLongitude());
+
+            OverlayOptions options = new MarkerOptions().position(shopPoint).icon(bitmap);
+            //将maker添加到地图
+            mapView.getMap().addOverlay(options);
+            mapView.getMap().addOverlay(new TextOptions().bgColor(0xAAFFFF00)
+                    .fontSize(32)
+                    .fontColor(0xFFFF00FF).text(shop.getName()).position(shopPoint));
+        }
     }
     @Override
     public void onResume() {
