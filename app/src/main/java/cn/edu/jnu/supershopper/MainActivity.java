@@ -31,13 +31,16 @@ public class MainActivity extends AppCompatActivity {
                     return MapViewFragment.newInstance();
                 case 2:
                     return BrowserFragment.newInstance();
+                case 3:
+                    return GameFragment.newInstance();
+
             }
             return ShopItemFragment.newInstance();
         }
 
         @Override
         public int getItemCount() {
-            return 3;
+            return 4;
         }
     }
     @Override
@@ -62,6 +65,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 2:
                         tab.setText(R.string.tab_caption_3_browser);
+                        break;
+                    case 3:
+                        tab.setText("Game");
                         break;
                 }
             }
