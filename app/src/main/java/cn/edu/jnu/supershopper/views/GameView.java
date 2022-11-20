@@ -106,7 +106,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     for(Spriter spriter:spriterArrayList){
                         spriter.draw(canvas);
                         //只能点击屏幕，不是对地鼠进行监听
-                        /*
                         setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -121,18 +120,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                                 }
 
                             }
-                        });*/
-                        spriter.setClickLinster(spriter1 -> {
-                            if(spriter1.getDrawableResourceId()==R.drawable.zhadan){
-                                Log.i("clicked","zhadan");
-                                addscore++;
-                            }
-                            if(spriter1.getDrawableResourceId()==R.drawable.mouse){
-                                Log.i("clicked","mouse");
-                                subscore--;
-                            }
                         });
-
                     }
                 }finally {
                     if(null!=canvas){

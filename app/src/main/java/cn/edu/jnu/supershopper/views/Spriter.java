@@ -83,9 +83,10 @@ public class Spriter{
     public interface SperitClickLinster {
         void onClick(Spriter spriter);
     }
+    /*
     private SperitClickLinster clickLinster;
     public void setClickLinster(SperitClickLinster clickLinster) {
         this.clickLinster = clickLinster;
-    }
+    }*/
 
 }
