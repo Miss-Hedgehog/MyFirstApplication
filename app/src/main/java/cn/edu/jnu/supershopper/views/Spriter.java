@@ -80,10 +80,18 @@ public class Spriter{
     public void setDirection(float direction) {
         this.direction = direction;
     }
+
+    public boolean isTouched(float tempX, float tempY) {
+        if((tempX-x)*(tempX-x)+(tempY-y)*(tempY-y)<=20000){
+            return true;
+        }
+        return false;
+    }
+
+    /*
     public interface SperitClickLinster {
         void onClick(Spriter spriter);
     }
-    /*
     private SperitClickLinster clickLinster;
     public void setClickLinster(SperitClickLinster clickLinster) {
         this.clickLinster = clickLinster;

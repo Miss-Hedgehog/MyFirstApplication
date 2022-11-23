@@ -3,10 +3,12 @@ package cn.edu.jnu.supershopper.views;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -21,7 +23,11 @@ import java.util.Random;
 import cn.edu.jnu.supershopper.R;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
-
+    private float touchedX;
+    private float touchedY;
+    private boolean isTouched=false;
+    private int hitmouseCount=0;
+    private int hitZhadanCount=0;
     public GameView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initView();
@@ -81,6 +87,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         drawThread.stopThread();
 
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        /*while(MotionEvent.ACTION_UP==event.getAction()){
+            touchedX=event.getRawX();
+            touchedY=event.getRawY();
+            isTouched=true;
+        }*/
+        //return super.onTouchEvent(event);
+        touchedX=event.getRawX();
+        touchedY=event.getRawY();
+        isTouched=true;
+        return true;
+    }
+
     class DrawThread extends Thread{
         private boolean isDrawing=true;
 
@@ -92,7 +113,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 e.printStackTrace();
             }
         }
-
         @Override
         public  void run(){
             while (isDrawing){
@@ -100,27 +120,33 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 try{
                     canvas=surfaceHolder.lockCanvas();
                     canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                    Paint textPaint=new Paint();
+                    textPaint.setColor(Color.RED);
+                    textPaint.setTextSize(40);
+                    while(isTouched){
+                        float tempX=touchedX;
+                        float tempY=touchedY;
+                        isTouched=false;
+                        for(Spriter spriter:spriterArrayList){
+                            if(spriter.isTouched(tempX,tempY)){
+                                if(spriter.getDrawableResourceId()==R.drawable.mouse){
+                                    hitmouseCount+=1;
+                                }
+                                if(spriter.getDrawableResourceId()==R.drawable.zhadan){
+                                    hitZhadanCount+=1;
+                                }
+                            }
+                        }
+                        canvas.drawText("你击中了"+hitmouseCount+"只地鼠！你击中了"+hitZhadanCount+"只炸弹！",40,40,textPaint);
+                    }
+
                     for(Spriter spriter:spriterArrayList){
+
                         spriter.move(canvas.getHeight(),canvas.getWidth());
                     }
+
                     for(Spriter spriter:spriterArrayList){
                         spriter.draw(canvas);
-                        //只能点击屏幕，不是对地鼠进行监听
-                        setOnClickListener(new OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if(spriter.getDrawableResourceId()==R.drawable.zhadan){
-                                    Log.i("clicked","zhadan");
-                                    addscore++;
-                                }
-                                if(spriter.getDrawableResourceId()==R.drawable.mouse){
-                                    Log.i("clicked","mouse");
-                                    subscore--;
-
-                                }
-
-                            }
-                        });
                     }
                 }finally {
                     if(null!=canvas){
