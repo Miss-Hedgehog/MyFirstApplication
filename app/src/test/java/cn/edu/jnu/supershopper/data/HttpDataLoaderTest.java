@@ -52,7 +52,6 @@ public class HttpDataLoaderTest {
                 "  ]\n" +
                 "}";
         List<ShopLocation> locations= httpDataLoader.ParseJsonData(fileContent);
-
         Assert.assertEquals(3,locations.size());
         Assert.assertEquals("暨大珠海",locations.get(0).getName());
         Assert.assertEquals(22.251953,locations.get(2).getLatitude(),1e-6);

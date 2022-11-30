@@ -30,7 +30,6 @@ public class Spriter{
         this.context = context;
     }
     public void move(float maxHeight, float maxWidth) {
-
         int pos=new Random().nextInt(position.length);//随机设置位置信息
         this.setX(position[pos][0]);
         this.setY(position[pos][1]);
@@ -82,19 +81,10 @@ public class Spriter{
     }
 
     public boolean isTouched(float tempX, float tempY) {
-        if((tempX-x)*(tempX-x)+(tempY-y)*(tempY-y)<=20000){
+        if((tempX-x)*(tempX-x)+(tempY-y)*(tempY-y)<=30000){
             return true;
         }
         return false;
     }
-
-    /*
-    public interface SperitClickLinster {
-        void onClick(Spriter spriter);
-    }
-    private SperitClickLinster clickLinster;
-    public void setClickLinster(SperitClickLinster clickLinster) {
-        this.clickLinster = clickLinster;
-    }*/
 
 }

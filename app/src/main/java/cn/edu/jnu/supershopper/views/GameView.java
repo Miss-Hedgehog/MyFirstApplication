@@ -55,8 +55,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private SurfaceHolder surfaceHolder;
     private DrawThread drawThread=null;
 
-    //private TextView dishu_score=findViewById(R.id.mouse_click);
-   // private TextView zhadan_score=findViewById(R.id.zhadan_click);
     private int addscore=0;
     private int subscore=0;
     private ArrayList<Spriter> spriterArrayList=new ArrayList<>();
@@ -90,12 +88,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        /*while(MotionEvent.ACTION_UP==event.getAction()){
-            touchedX=event.getRawX();
-            touchedY=event.getRawY();
-            isTouched=true;
-        }*/
-        //return super.onTouchEvent(event);
         touchedX=event.getRawX();
         touchedY=event.getRawY();
         isTouched=true;
